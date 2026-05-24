@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Menu-bar app: never show a dock icon, never appear in the Cmd+Tab switcher.
+	     macOS reads this at launch, so the dock slot is suppressed from the very first
+	     frame (the runtime set_activation_policy(Accessory) in lib.rs is then a backup). -->
+	<key>LSUIElement</key>
+	<true/>
+</dict>
+</plist>

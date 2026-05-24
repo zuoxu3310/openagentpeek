@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* Design tokens adopted from openusage 0.6.24's dark theme (src/index.css). This is a
+   dark-only menubar app, so the dark values are baked straight into :root rather than
+   gated behind a .dark class. `@theme inline` exposes them as Tailwind color utilities
+   (bg-popover, text-muted-foreground, border-border, …). */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-page-accent: var(--page-accent);
+  --color-amber: var(--amber);
+  --color-green-500: var(--green-500);
+  --color-blue-500: var(--blue-500);
+  --color-rust: var(--rust);
+  --color-destructive: var(--destructive);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #1c1c1e;
+  --foreground: #ededed;
+  --card: #1c1c1e;
+  --popover: rgba(28, 28, 30, 0.98);
+  --popover-foreground: #ededed;
+  --muted: #2a2a2c;
+  --muted-foreground: #9aa3b5;
+  --accent: #252527;
+  --accent-foreground: #ededed;
+  --border: rgba(255, 255, 255, 0.08);
+  --sidebar: #161618;
+  --sidebar-foreground: #ededed;
+  --page-accent: #bfff00;
+  --destructive: #ef4444;
+
+  /* Status palette — our signal, one scheme across popover AND tray (DECISIONS · D14):
+     yellow = waiting, blue = working, green = idle. */
+  --amber: #ffc24d; /* waiting — needs you */
+  --blue-500: #4896ff; /* working */
+  --green-500: #4cd787; /* idle */
+  --rust: #c2693f; /* context window nearly full */
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  font-family: "Geist", -apple-system, system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Hide scrollbars — this is a menubar popover, not a scrollable page. */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* It's a menubar app, not keyboard-navigated — kill focus rings. */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Bubble arrow pointing up at the tray icon (openusage's tray-arrow). The outer
+   triangle is the border tint; the inner one fills with the popover color so it reads
+   as the card's tail. */
+.tray-arrow {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid var(--border);
+  position: relative;
+  flex-shrink: 0;
+}
+.tray-arrow::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 1.5px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--popover);
+}
+
+/* Needs-you: the one perpetual motion — a breathing amber bar down the left edge. */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scaleY(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+.breathe {
+  animation: breathe 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .breathe {
+    animation: none;
+  }
+}
